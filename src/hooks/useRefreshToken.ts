@@ -17,7 +17,11 @@ const useRefreshToken = () => {
         'response data access token from use refresh token function',
         response.data.accessToken,
       );
-      return { ...prv, accessToken: response.data.accessToken };
+      return {
+        ...prv,
+        roles: response.data.roles,
+        accessToken: response.data.accessToken,
+      };
     });
     return response.data.accessToken;
   };
