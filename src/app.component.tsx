@@ -1,45 +1,57 @@
-/* eslint-disable prettier/prettier */
-import React, { FC, ReactElement } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import SinglePostPage from './components/SinglePost';
-import Header from '~/layout/header.component';
-import Footer from '~/layout/footer.component';
-import PostList from './components/PostList';
-import CreatePost from './components/CreatePost';
-import UpdatePost from './components/UpdatePost';
+import React from 'react';
+import Register from './components/Register';
+import LinkPage from './components/LinkPage';
+import Unauthorized from './components/Unauthorized';
+import Login from './components/Login';
+import Layout from './components/Layout';
+import Admin from './components/Admin';
+import Lounge from './components/Lounge';
+import Editor from './components/Editor';
+import Home from './components/Home';
+import Missing from './components/Missing';
+import RequireAuth from './components/RequireAuth';
+import { Routes, Route } from 'react-router-dom';
 
-const App: FC = (): ReactElement => {
-  return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
+// interface Props {
+//   allowedRoles: string;
+// }
 
-      <main className="grow">
-        <Router>
-          <nav className="m-2 flex justify-center">
-            <Link
-              className="m-2 rounded-md bg-sky-500 p-2 hover:bg-sky-800"
-              to="/"
-            >
-              Home
-            </Link>
-            <Link
-              className="m-2 rounded-md bg-sky-500 p-2 hover:bg-sky-800"
-              to="/createPost"
-            >
-              Create New Post
-            </Link>
-          </nav>
-          <Routes>
-            <Route element={<PostList />} path="/" />
-            <Route element={<SinglePostPage />} path="/posts/:id" />
-            <Route element={<UpdatePost />} path="updatePost/:id" />
-            <Route element={<CreatePost />} path="createPost/" />
-          </Routes>
-        </Router>
-      </main>
-      <Footer />
-    </div>
-  );
+const ROLES = {
+  User: 2001,
+  Editor: 1984,
+  Admin: 5150,
 };
+
+function App() {
+  return (
+    <Routes>
+      <Route element={<Layout />} path="/">
+        <Route element={<Register />} path="register" />
+        <Route element={<Login />} path="login" />
+        <Route element={<LinkPage />} path="linkpage" />
+        <Route element={<Unauthorized />} path="unauthorized" />
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route element={<Home />} path="/" />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
+          <Route element={<Editor />} path="editor" />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route element={<Admin />} path="admin" />
+        </Route>
+
+        <Route
+          element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}
+        >
+          <Route element={<Lounge />} path="lounge" />
+        </Route>
+        <Route element={<Missing />} path="*" />
+      </Route>
+    </Routes>
+  );
+}
 
 export default App;
