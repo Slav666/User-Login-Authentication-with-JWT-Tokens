@@ -3,17 +3,12 @@ import { useRef, useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useLocalStorage from '../hooks/useLocalStorage';
-import useInput from '../hooks/useInput';
 
 import axios from '../api/axios';
 const LOGIN_URL = '/auth';
 
-// interface CustomizedState {
-//   myState: string;
-// }
-
 const Login: FC = () => {
-  const { setAuth } = useAuth();
+  const { setAuth }: any = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -21,7 +16,7 @@ const Login: FC = () => {
   const userRef = useRef<HTMLInputElement>();
   const errRef = useRef<HTMLInputElement>();
 
-  const [user, resetUser, attributeObj] = useInput('');
+  const [user, setUser] = useLocalStorage('user', '');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
 
@@ -48,8 +43,7 @@ const Login: FC = () => {
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({ user, pwd, roles, accessToken });
-      resetUser();
-      // setUser('');
+      setUser('');
       setPwd('');
       navigate(from, { replace: true });
     } catch (err) {
@@ -89,9 +83,8 @@ const Login: FC = () => {
           autoComplete="off"
           id="username"
           type="text"
-          {...attributeObj}
-          // value={user}
-          // onChange={e => setUser(e.target.value)}
+          value={user}
+          onChange={e => setUser(e.target.value)}
           className="border-2 border-orange-500 "
         />
 
