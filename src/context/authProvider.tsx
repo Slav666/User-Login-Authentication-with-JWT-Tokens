@@ -1,17 +1,13 @@
 import React, { FC } from 'react';
 import { createContext, useState } from 'react';
-
-interface CurrentUserContextType {
-  username: string;
+interface IAuth {
+  user: string;
   password: string;
+  roles: number[];
+  accessToken: string;
 }
 
-// interface Auth {
-//   auth:;
-
-// }
-
-const AuthContext = createContext({} as CurrentUserContextType);
+const AuthContext = createContext({});
 
 export const AuthProvider: FC = ({
   children,
@@ -19,7 +15,7 @@ export const AuthProvider: FC = ({
   children: React.ReactElement;
 }) => {
   console.log('children', children);
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState<IAuth>({} as any);
   console.log('auth', auth);
 
   return (

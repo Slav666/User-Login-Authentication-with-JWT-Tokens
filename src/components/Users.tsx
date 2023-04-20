@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 import { useState, useEffect } from 'react';
-// import axios, { axiosPrivate } from '../api/axios';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { replace } from 'cypress/types/lodash';
 // import useRefreshToken from '../hooks/useRefreshToken';
+interface IUser {
+  username: string;
+  password: string;
+}
 
 const User: FC = () => {
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState<IUser[]>();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const loaction = useLocation();
@@ -49,12 +51,6 @@ const User: FC = () => {
           <p>No users to display</p>
         )}
       </h2>
-      {/* <button
-        className="mt-2 rounded-md bg-orange-400 text-5xl"
-        onClick={() => refresh()}
-      >
-        Refresh
-      </button> */}
     </article>
   );
 };
