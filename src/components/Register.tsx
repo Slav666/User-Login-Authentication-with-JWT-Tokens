@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import axios from '../api/axios';
 import { useRef, useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
@@ -25,6 +26,8 @@ const Register: FC = () => {
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const { register, handleSubmit } = useForm();
+
   useEffect(() => {
     userRef.current.focus();
   }, []);
@@ -42,8 +45,8 @@ const Register: FC = () => {
     setErrMsg('');
   }, [user, password, matchPassword]);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async () => {
+    // e.preventDefault();
     const value1 = USER_REGEX.test(user);
     const value2 = PWD_REGEX.test(password);
     if (!value1 || !value2) {
@@ -90,10 +93,11 @@ const Register: FC = () => {
           <h1>Register</h1>
           <form
             className=" flex grow flex-col justify-evenly pb-2 "
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <label htmlFor="username">Username:</label>
             <input
+              {...register('username')}
               ref={userRef}
               required
               aria-describedby="uidnote"
@@ -120,6 +124,7 @@ const Register: FC = () => {
             </p>
             <label htmlFor="password">Password:</label>
             <input
+              {...register('password')}
               required
               aria-describedby="pwdnote"
               aria-invalid={validPassword ? 'false' : 'true'}
@@ -150,6 +155,7 @@ const Register: FC = () => {
             </p>
             <label htmlFor="confirm_pwd">Confirm Password:</label>
             <input
+              {...register('confirm_pwd')}
               required
               aria-describedby="confirmnote"
               aria-invalid={validMatch ? 'false' : 'true'}

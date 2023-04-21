@@ -36,7 +36,7 @@ const User: FC = () => {
       controller.abort();
     };
   }, []);
-
+e.preventDefault();
   return (
     <article>
       <h2>

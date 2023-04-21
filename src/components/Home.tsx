@@ -14,6 +14,7 @@ const Home: FC = () => {
     navigate('/linkpage');
   };
 
+  console.log('sign out', signOut);
   return (
     <section className="flex w-full max-w-md flex-col justify-start bg-cyan-400 p-2">
       <h1>Home</h1>
