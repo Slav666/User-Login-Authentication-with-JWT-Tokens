@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useRef, useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 import axios from '../api/axios';
@@ -12,6 +13,8 @@ const Login: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
+
+  const { register, handleSubmit } = useForm();
 
   const userRef = useRef<HTMLInputElement>();
   const errRef = useRef<HTMLInputElement>();
@@ -28,8 +31,8 @@ const Login: FC = () => {
     setErrMsg('');
   }, [user, pwd]);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async () => {
+    // e.preventDefault();
 
     try {
       const response = await axios.post(
@@ -71,27 +74,29 @@ const Login: FC = () => {
       </p>
       <h1>Sign In</h1>
       <form
-        onSubmit={handleSubmit}
         className=" flex grow flex-col justify-evenly pb-2 "
+        onSubmit={handleSubmit(onSubmit)}
       >
         <label htmlFor="username" className="mt-1">
           Username:
         </label>
         <input
+          {...register('username')}
           ref={userRef}
           required
           autoComplete="off"
+          className="border-2 border-orange-500 "
           id="username"
           type="text"
           value={user}
           onChange={e => setUser(e.target.value)}
-          className="border-2 border-orange-500 "
         />
 
         <label htmlFor="password" className="mt-1">
           Password:
         </label>
         <input
+          {...register('password')}
           required
           className="border-2 border-orange-500 "
           id="password"
